@@ -1,0 +1,23 @@
+
+DECLARE @xml NVARCHAR(MAX)
+DECLARE @body NVARCHAR(MAX)
+
+SET @xml = CAST(( SELECT [Database Name] AS 'td','',[Recovery Model] AS 'td','', [Database Size In GB] AS 'td','', [Backup Start Date] AS 'td','', [Backup Finish Date] AS 'td'
+FROM Table_Name
+
+FOR XML PATH('tr'), ELEMENTS ) AS NVARCHAR(MAX))
+
+SET @body ='<html><body><H3>Heading</H3>
+<table border = 1> 
+<tr>
+<th> Database Name </th> <th> Recovery Model </th> <th> Database Size In GB </th> <th> Backup Start Date </th> <th> Backup Finish Date </th></tr>'   
+
+SET @body = @body + @xml +'</table></body></html>'
+
+EXEC msdb.dbo.sp_send_dbmail
+@profile_name = 'Profile_Name', -- replace with your SQL Database Mail Profile 
+@body = @body,
+@body_format ='HTML',
+@recipients = 'ankur04chhabra@outlook.com', -- replace with your email address
+@subject = 'Subject' ;
+
