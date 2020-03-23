@@ -1,0 +1,62 @@
+select tb.TABLE_CATALOG,tb.TABLE_NAME,col.COLUMN_NAME from INFORMATION_SCHEMA.TABLES as tb
+inner join INFORMATION_SCHEMA.COLUMNS as col on tb.TABLE_NAME=col.TABLE_NAME and col.DATA_TYPE in ('varbinary','binary')
+inner join #temp2 as t on t.tabname=
+
+
+
+--DECLARE @TableRowCounts TABLE ([TableName] VARCHAR(128), [RowCount] INT) ;
+--INSERT INTO @TableRowCounts ([TableName], [RowCount])
+--EXEC sp_MSforeachtable 'SELECT ''?'' [TableName], COUNT(*) [RowCount] FROM ?' ;
+--SELECT [TableName], [RowCount]
+--FROM @TableRowCounts
+--ORDER BY [TableName] desc
+--GO
+
+
+
+create table #temp
+(
+	[TableName] VARCHAR(128), [RowCount] INT
+)
+insert into #temp
+EXEC sp_MSforeachtable 'SELECT ''?'' TableName, COUNT(*) [RowCount] FROM ?' ;
+SELECT [TableName], [RowCount]
+FROM #temp
+ORDER BY [TableName] desc
+GO
+
+
+--drop table #temp
+
+
+create table #temp2
+(
+	TbName nvarchar(100),
+	RowCountNo int
+)
+
+insert into #temp2
+select substring(TableName,8,charindex(']',substring(TableName,8,LEN(TableName)),1)-1) as TBName,[RowCount] from #temp
+
+select  * from #temp2
+
+
+
+select CHARINDEX(']','[dbo].[im_tb_t]',8)
+select CHARINDEX(']','[dbo].[im_tb_t]',LEN('[dbo].[im_tb_t]'))
+select substring('[dbo].[im_tb_t]',8,charindex(']','im_tb_t]',1)-1)
+
+select LEN('[dbo].[im_tb_t]')-1
+
+
+select LEN('[dbo].[im_tb_t]')
+
+select charindex(']','im_tb_t]',1)
+
+select SUBSTRING('[dbo].[im_tb_t]',8,)
+
+select SUBSTRING('[dbo].[im_tb_t]',CHARINDEX('[','[dbo].[im_tb_t]',1),CHARINDEX(']','[dbo].[im_tb_t]',LEN('[dbo].[im_tb_t]')))
+
+
+
+
