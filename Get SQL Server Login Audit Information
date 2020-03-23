@@ -1,0 +1,15 @@
+--- To Get SQL Server Login Audit Information
+
+  select c.event_time,a.name as Action_Name,d.name as Server_Role,e.name as [Object]
+ ,b.class_type_desc,containing_group_name as Action_Group,c.statement 
+ from sys.dm_audit_actions as a inner join sys.dm_audit_class_type_map as b on a.class_desc=b.class_type_desc
+ inner join fn_get_audit_file('E:\Audit_Logs\Audit_Server_Login_7058B6B2-55AC-43A2-8FE9-83BBB7919BE3_0_132277782480490000.sqlaudit',null,null) as c on b.class_type=c.class_type
+ and c.action_id=a.action_id 
+ left join sys.server_principals as d on c.target_server_principal_id=d.principal_id and d.type='R' or d.principal_id=c.object_id
+ left join sys.server_principals as e on e.principal_id=c.target_server_principal_id and e.type in ('U','S') 
+ where  c.statement not like '%RedGate%'
+ order by event_time desc
+
+
+ 
+
