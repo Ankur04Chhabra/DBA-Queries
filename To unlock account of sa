@@ -1,0 +1,4 @@
+
+-- Need to reset the password of sa
+ALTER LOGIN sa WITH PASSWORD = 'cctns@123' UNLOCK ;
+GO
