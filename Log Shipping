@@ -1,0 +1,17 @@
+In Stand By/Read Only mode of log shipping
+
+1:  We can only select/read the data from physical table in read only mode 
+2:   DML/DDL statement cant be execute.
+3:  Sp_Helptext and can exeute procedure as well  
+4:  we can create temp table and can insert data into temp table from base table from read only database
+5:  Table/SP creation/alter all transaction are shipped to secondary database .
+
+6:  Whlie we select read only option in log shipping configuration then one option is enabled for "Disconnect  user when restoring the transaction log".
+      It means if this option is not clicked and any user is already connected with the database then restore job on secondary server will be failed.
+     if option is clicked and if any user is connected with the database then user will be automatically disconnected.
+
+7:  .TUF(Transaction Undo File): This TUF file is created in secondary sahred path and only created for Stand by option, It holds the uncommitted transaction of log backup 
+      that comes from primary backup location and when the next log backup is comes then it synchronized the data in secondary database.
+
+8:  .WRK File: This file extension is given to those files which are being copied from primary backup location to secondary backup location and these file gets renamed with .trn when 
+      copy file gets  completed.
