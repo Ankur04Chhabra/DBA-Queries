@@ -1,0 +1,45 @@
+
+
+
+----- For database User Mapping Server 
+
+
+SELECT b.name AS DatabaseRoleName,   
+   isnull (b.name, 'No members') AS DatabaseUserName   
+ FROM sys.database_role_members AS a  
+ RIGHT OUTER JOIN sys.database_principals AS b  
+   ON a.role_principal_id = b.principal_id  
+ LEFT OUTER JOIN sys.database_principals AS c  
+   ON a.member_principal_id = c.principal_id  
+WHERE b.type = 'R'
+ORDER BY b.name; 
+
+
+
+--- For Server Login 
+
+select a.name,dbname as [Default Database],b.create_date as [Created Date],b.modify_date as [Modified Date],case when b.is_disabled=1 then 'Disabled' else 'Enabled' end As Is_Disabled,b.type_desc as [Login Type],
+case when isntgroup=1 then 'Yes' else 'No' end As [Is Windows Group User],
+case when isntuser=1 then 'yes' else 'No' end As [Is Windows User],
+case when sysadmin=1 then 'Yes' else 'No' end As [Sysadmin],
+case when securityadmin=1 then 'Yes' else 'No' end As [securityadmin],
+case when serveradmin=1 then 'Yes' else 'No' end As [serveradmin],
+case when setupadmin=1 then 'Yes' else 'No' end As [setupadmin],
+case when processadmin=1 then 'Yes' else 'No' end As [processadmin],
+case when diskadmin=1 then 'Yes' else 'No' end As [diskadmin],
+case when dbcreator=1 then 'Yes' else 'No' end As [dbcreator],
+case when bulkadmin=1 then 'Yes' else 'No' end As [bulkadmin]
+ from sys.syslogins as a
+ inner join sys.server_principals as b on a.name=b.name
+where --name in ('cmap','sa','dev','AdmLogin','INVLogin') and 
+-- For Only SQL Authentication Login Only
+isntgroup=0 and isntuser=0 and 
+denylogin=0 and hasaccess=1
+order by createdate desc 
+
+
+
+
+
+
+
